@@ -1,0 +1,13 @@
+{
+    "fund_get_params": {
+        "type": "lsjz", 
+        "sdate": "2021-03-15", 
+        "edate": "2021-04-30",
+        "per": 20,
+        "page": 1
+    },
+    "fund_code_list": {
+        "yifangda_zhongxiaopan": "110011",
+        "zhongou_shidaixianfeng": "001938"
+    }
+}
