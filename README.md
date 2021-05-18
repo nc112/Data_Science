@@ -6,4 +6,3 @@ DAP is a project for Incubation, majorly focus on OJT of Python and python based
 - fetch the required data(automatically via params)
 - data intelligence report
 - automatically reminder
-
