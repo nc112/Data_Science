@@ -6,6 +6,7 @@ import pandas as pd
 from json import load as jsload
 import matplotlib.pyplot as plt
 
+
 # Define the params
 const_URL = 'http://fund.eastmoney.com/f10/F10DataApi.aspx'
 
@@ -95,45 +96,6 @@ def fetch_fund_data(fund_params, code=''):
     return data
 
 
-def draw_figure(data):
-    # Fix chinese and '-' display issue
-    plt.rcParams['font.sans-serif'] = ['SimHei']
-    plt.rcParams['axes.unicode_minus'] = False
-
-    # trim data
-    data['净值日期'] = pd.to_datetime(data['净值日期'], format='%Y/%m/%d')
-    data['单位净值'] = data['单位净值'].astype(float)
-    data['累计净值'] = data['累计净值'].astype(float)
-    data['日增长率'] = data['日增长率'].str.strip('%').astype(float)
-    data = data.sort_values(by='净值日期',
-                            axis=0,
-                            ascending=True).reset_index(drop=True)
-
-    # coordinate Axis update
-    fig = plt.figure()
-    ax1 = fig.add_subplot(111)
-    ax1.plot(data['净值日期'], data['单位净值'])
-    ax1.plot(data['净值日期'], data['累计净值'])
-    ax1.set_ylabel('净值数据')
-    ax1.set_xlabel('日期')
-    plt.legend(loc='upper left')
-
-    ax2 = ax1.twinx()
-    ax2.plot(data['净值日期'],  data['日增长率'], 'r')
-    ax2.set_ylabel('日增长率（%）')
-    plt.legend(loc='upper right')
-    plt.title('基金净值数据')
-    plt.show()
-
-    bonus = data['累计净值'] - data['单位净值']
-    plt.figure()
-    plt.plot(data['净值日期'], bonus)
-    plt.xlabel('日期')
-    plt.ylabel('累计净值-单位净值')
-    plt.title('基金“分红”信息')
-    plt.show()
-
-
 # Data analyze
 def data_analyze_from_police(data):
     assert data is not None
@@ -142,16 +104,17 @@ def data_analyze_from_police(data):
     print('日增长率>0的天数：', sum(data['日增长率'] > 0))
 
 
-# 易方达中小盘混合: 110011
+# Main Func
 if __name__ == "__main__":
     with open('./config/config.json') as config_file:
         config_params = jsload(fp=config_file)
     data = fetch_fund_data(fund_params=config_params['fund_get_params'],
                            code=config_params['fund_code_list']['zhongou_shidaixianfeng'])
 
+    # printout all the data
     print('data:', data)
-    # update figure
-    draw_figure(data)
+    
+    # printout the data by police
     data_analyze_from_police(data)
 
     # for debug, highlight the data
