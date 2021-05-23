@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from json import load as jsload
 import matplotlib.pyplot as plt
+import drawing_module
 
 
 # Define the params
@@ -99,9 +100,9 @@ def fetch_fund_data(fund_params, code=''):
 # Data analyze
 def data_analyze_from_police(data):
     assert data is not None
-    data['日增长率'] = data['日增长率'].str.strip('%').astype(float)
-    print('日增长率缺失总天数：', sum(np.isnan(data['日增长率'])))
-    print('日增长率>0的天数：', sum(data['日增长率'] > 0))
+    data_wrap_daily_increase = data['日增长率'].str.strip('%').astype(float)
+    print('日增长率缺失总天数：', sum(np.isnan(data_wrap_daily_increase)))
+    print('日增长率>0的天数：', sum(data_wrap_daily_increase > 0))
 
 
 # Main Func
@@ -116,6 +117,7 @@ if __name__ == "__main__":
     
     # printout the data by police
     data_analyze_from_police(data)
+    drawing_module.draw_figure(data)
 
     # for debug, highlight the data
     #print(data)
